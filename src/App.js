@@ -1,5 +1,8 @@
 import React from 'react';
-import './App.css';
+import Navigation from './components/Navigation'
+import Field from './components/Field'
+import Button from './components/Button'
+import ManipulationPanel from './components/ManipulationPanel'
 
 function App() {
   return (
