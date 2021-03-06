@@ -3,7 +3,7 @@ import Navigation from './components/Navigation'
 import Field from './components/Field'
 import Button from './components/Button'
 import ManipulationPanel from './components/ManipulationPanel'
-import { initFields } from './utils'
+import { initFields, getFoodPosition } from './utils'
 
 const initialPosition = { x: 17, y: 17 }
 const initialValues = initFields(35, initialPosition)
@@ -65,7 +65,7 @@ const isCollision = (fieldSize, position) => {
 
 function App() {
   const [fields, setFields] = useState(initialValues)
-  const [body, setBody] = useState()
+  const [body, setBody] = useState([])
   const [status, setStatus] = useState(GameStatus.init)
   const [direction, setDirection] = useState(Direction.up)
   const [tick, setTick] = useState(0)
@@ -133,9 +133,17 @@ function App() {
     if (isCollision(fields.length, newPosition)) {
       return false
     }
-    fields[y][x] = '';
+    const newBody = [...body]
+    if (fields[newPosition.y][newPosition.x] !== 'food'){
+      const removingTrack = newBody.pop()
+      fields[removingTrack.y][removingTrack.x] = ''
+    } else {
+      const food = getFoodPosition(fields.length, [...newBody, newPosition])
+      fields[food.y][food.x] = 'food'
+    }
     fields[newPosition.y][newPosition.x] = 'snake';
-    setBody(newPosition);
+    newBody.unshift(newPosition);
+    setBody(newBody);
     setFields(fields);
     return true
   }
