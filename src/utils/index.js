@@ -4,6 +4,7 @@ export const initFields = (fieldSize) => {
     const cols = new Array(fieldSize).fill('')
     fields.push(cols)
   }
+  fields[17][17] = 'snake'
 
   return fields
 }
