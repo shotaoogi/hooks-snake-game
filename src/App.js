@@ -65,13 +65,13 @@ const isCollision = (fieldSize, position) => {
 
 function App() {
   const [fields, setFields] = useState(initialValues)
-  const [position, setPosition] = useState()
+  const [body, setBody] = useState()
   const [status, setStatus] = useState(GameStatus.init)
   const [direction, setDirection] = useState(Direction.up)
   const [tick, setTick] = useState(0)
 
   useEffect(() => {
-    setPosition(initialPosition);
+    setBody([initialPosition]);
     timer = setInterval(() => {
       setTick(tick => tick + 1)
     }, defaultInterval);
@@ -79,7 +79,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!position || status !== GameStatus.playing) {
+    if (body.length === 0 || status !== GameStatus.playing) {
       return
     }
     const canContinue = handleMoving()
@@ -95,7 +95,7 @@ function App() {
       setTick(tick => tick + 1)
     }, defaultInterval)
     setStatus(GameStatus.init)
-    setPosition(initialPosition)
+    setBody([initialPosition])
     setDirection(Direction.up)
     setFields(initFields(35, initialPosition))
   }
@@ -124,7 +124,7 @@ function App() {
   }, [onChangeDirection])
 
   const handleMoving = () => {
-    const { x, y } = position
+    const { x, y } = body[0]
     const delta = Delta[direction];
     const newPosition = {
       x: x + delta.x,
@@ -135,7 +135,7 @@ function App() {
     }
     fields[y][x] = '';
     fields[newPosition.y][newPosition.x] = 'snake';
-    setPosition(newPosition);
+    setBody(newPosition);
     setFields(fields);
     return true
   }
